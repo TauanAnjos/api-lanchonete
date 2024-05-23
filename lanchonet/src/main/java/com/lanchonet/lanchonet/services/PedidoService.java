@@ -53,8 +53,15 @@ public class PedidoService {
         Optional<Pedido> pedidoOptional = pedidoRepository.findById(id);
         if (pedidoOptional.isPresent()){
             Pedido updatePedido = pedidoOptional.get();
-            updatePedido.setItens(pedido.getItens());
+            updatePedido.getItens().clear();
+
+            for(ItemPedido itemPedido : pedido.getItens()){
+                itemPedido.setPedido(updatePedido);
+                updatePedido.getItens().add(itemPedido);
+            }
             updatePedido.setDataPedido(pedido.getDataPedido());
+            updatePedido.calcularTotalPedido();
+
             return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(updatePedido));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

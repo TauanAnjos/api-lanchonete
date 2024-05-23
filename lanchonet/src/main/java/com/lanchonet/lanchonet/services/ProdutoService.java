@@ -30,4 +30,26 @@ public class ProdutoService {
     public Produto saveProduct(Produto produto){
         return produtoRepository.save(produto);
     }
+
+    public ResponseEntity<Object> produtoUpdate(Long id, Produto produto) {
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+        if (produtoOptional.isPresent()){
+            Produto updateProduto = produtoOptional.get();
+
+            updateProduto.setNomeProduto(produto.getNomeProduto());
+            updateProduto.setDescricao(produto.getDescricao());
+            updateProduto.setPreco(produto.getPreco());
+            return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(updateProduto));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    public Object produtoDelete(Long id) {
+        Optional<Produto> optionalProduto = produtoRepository.findById(id);
+        if (optionalProduto.isPresent()){
+            produtoRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }

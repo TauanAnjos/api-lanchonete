@@ -31,4 +31,14 @@ public class ProdutoController {
     public ResponseEntity<Produto> createProduct(@RequestBody Produto produto){
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.saveProduct(produto));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateProduto(@PathVariable(value = "id")Long id,@RequestBody Produto produto){
+        return ResponseEntity.status(HttpStatus.OK).body(produtoService.produtoUpdate(id, produto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteProduto(@PathVariable(value = "id")Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(produtoService.produtoDelete(id));
+    }
 }
